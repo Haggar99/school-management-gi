@@ -2,10 +2,12 @@ import express = require('express');
 import bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
+import *as enseignantCtrl from './controllers/enseignant.controller';
+
 
 const app = express();
 
-
+const enseignantRouter = require('./routes/enseignant.routes');
 
 
 
@@ -33,6 +35,6 @@ app.use(
 );
 
 
-
+app.use('/api/enseignant', enseignantRouter);
 export default app;
 
