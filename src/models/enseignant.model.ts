@@ -20,6 +20,7 @@ export interface IEnseignant {
     email: string;
     password: string;
     status: Status;
+    admin: string;
     createdAt: Date;
     updatedAt: Date
 }
@@ -58,7 +59,13 @@ const enseignantSchema = new mongoose.Schema({
     },
     status: {
         type: String,
+        enum: [Status.True, Status.False],
         require: true,
+    },
+    admin: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+        ref: 'Admin'
     },
     createdAt: {
         type: Date,

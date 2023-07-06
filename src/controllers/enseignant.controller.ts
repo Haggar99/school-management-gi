@@ -9,21 +9,22 @@ export const creeEnseignant = async (req: Request, res: Response ) => {
     const data = req.body;
 
     const email = data.email;
-    console.log('enseignant: ',data);
-
+    const user = (req as any).user
+    console.log('user: ',{ user});
+    console.log('...user: ', {...user});
     try {
         // La fonction findOne() c'est une fonction qui nous
         // permet de filtrer et de retourner un seul objet s'il existe
         const enseignant = await Enseignant.findOne({email});
 
-        if (enseignant) {
-            res.json({
-                message: 'Cet ensignant exist'
-            })
-        }
+        if (!enseignant) {
         const hash = await bcrypt.hash(data.password, 10);
         data.password = hash;
-        const newEnseignant = new Enseignant(data);
+        const userData = {
+            ...data,
+            admin: user.userId
+        }
+        const newEnseignant = new Enseignant(userData);
         console.log('newEnseignant: ',newEnseignant);
 
         // la fonction save() nous permet d'enregistrer un
@@ -35,6 +36,7 @@ export const creeEnseignant = async (req: Request, res: Response ) => {
                 message:"l'enseignant a été crée avec succée!" 
               })
         });
+        }else  res.json({message: 'Cet ensignant exist'})
         
     } catch (error) {
         res.status(500).json({
@@ -88,7 +90,7 @@ export const loginEnseignant = async (req: Request, res: Response) => {
 export const getEnseignants = async (req: Request, res: Response) => {
 
     try {
-        const enseignants: EnseignantDoc[] = await Enseignant.find()
+        const enseignants: EnseignantDoc[] = await Enseignant.find().populate('admin')
 
         res.status(201).json({
             enseignants

@@ -8,7 +8,7 @@ import *as enseignantCtrl from './controllers/enseignant.controller';
 const app = express();
 
 const enseignantRouter = require('./routes/enseignant.routes');
-
+const adminRouter = require('./routes/admin.routes');
 
 
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -36,5 +36,6 @@ app.use(
 
 
 app.use('/api/enseignant', enseignantRouter);
+app.use('/api/admin', adminRouter);
 export default app;
 
